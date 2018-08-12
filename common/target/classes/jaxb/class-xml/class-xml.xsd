@@ -1,0 +1,278 @@
+<?xml version="1.0"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:simpleType name="classNameType">  
+        <xs:restriction base="xs:string">  
+            <xs:minLength value="1"/>  
+            <xs:maxLength value="24"/>  
+        </xs:restriction>  
+    </xs:simpleType>
+    <xs:simpleType name="attributeNameType">  
+        <xs:restriction base="xs:string">  
+            <xs:minLength value="1"/>  
+            <xs:maxLength value="24"/>  
+        </xs:restriction>  
+    </xs:simpleType>
+    <xs:simpleType name="cntxtType">  
+        <xs:restriction base="xs:string">  
+            <xs:minLength value="1"/>  
+            <xs:maxLength value="32"/>  
+        </xs:restriction>  
+    </xs:simpleType>
+    <xs:simpleType name="codeType">  
+        <xs:restriction base="xs:string">  
+            <xs:minLength value="1"/>  
+            <xs:maxLength value="32"/>  
+        </xs:restriction>  
+    </xs:simpleType>
+    <xs:simpleType name="dbObjectNameType">  
+        <xs:restriction base="xs:string">  
+            <xs:minLength value="1"/>  
+            <xs:maxLength value="30"/>  
+        </xs:restriction>  
+    </xs:simpleType>
+    <xs:simpleType name="descriptionType">  
+        <xs:restriction base="xs:string">  
+            <xs:minLength value="0"/>  
+            <xs:maxLength value="240"/>  
+        </xs:restriction>  
+    </xs:simpleType>
+    <xs:simpleType name="classTypeType" final="restriction">  
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="OBJECT"/>
+            <xs:enumeration value="DATA"/>
+            <xs:enumeration value="TABLE"/>
+            <xs:enumeration value="INTERFACE"/>
+            <xs:enumeration value="META"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="dependencyTypeType" final="restriction">  
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="IMPLEMENTS"/>
+            <xs:enumeration value="REPORT_MEMBER"/>
+            <xs:enumeration value="ACCESS_CONTROLLED_BY"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="roleNameType">  
+        <xs:restriction base="xs:string">  
+            <xs:minLength value="1"/>  
+            <xs:maxLength value="24"/>  
+        </xs:restriction>  
+    </xs:simpleType>
+    <xs:simpleType name="indicatorType" final="restriction">  
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Y"/>
+            <xs:enumeration value="N"/>
+        </xs:restriction>
+    </xs:simpleType>	
+    <xs:simpleType name="triggerTypeType" final="restriction">  
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BEFORE"/>
+            <xs:enumeration value="AFTER"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="triggeringEventType" final="restriction">  
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="250"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="propertyCodeType">	
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="100"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="propertyTypeType">	
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="24"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="propertyValueType">	
+        <xs:restriction base="xs:string">
+            <xs:minLength value="0"/>
+            <xs:maxLength value="4000"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="dbSqlSyntaxType">	
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="4000"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="timeScopeCodeType" final="restriction">  
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="1HR"/>
+            <xs:enumeration value="DAY"/>
+            <xs:enumeration value="MTH"/>
+            <xs:enumeration value="YR"/>
+            <xs:enumeration value="VERSIONED"/>
+            <xs:enumeration value="EVENT"/>
+            <xs:enumeration value="NONE"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="dbObjectTypeType" final="restriction">  
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="TABLE"/>
+            <xs:enumeration value="VIEW"/>
+        </xs:restriction>
+    </xs:simpleType>	
+	
+    <xs:complexType name="classXmlType">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="class-cnfg" type="classCnfgType" maxOccurs="unbounded"/>
+            <xs:element name="class-ref" type="classRefType" maxOccurs="unbounded"/>
+        </xs:choice>
+        <xs:attribute name="version" type="xs:decimal" use="required"/>		
+    </xs:complexType>
+	
+    <xs:complexType name="classRefType">
+        <xs:sequence>
+            <xs:element name="app-space-cntx " type="appSpaceCntxElementType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="owner-cntx" type="ownerCntxElementType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="class-name" type="classNameType" use="required"/>
+    </xs:complexType>
+	
+    <xs:complexType name="classCnfgType">
+        <xs:sequence>
+            <xs:element name="db-where-condition" type="propertyValueType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="app-space-cntx " type="appSpaceCntxElementType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="owner-cntx" type="ownerCntxElementType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="class-name" type="classNameType" use="required"/>
+        <xs:attribute name="class-type" type="classTypeType" use="required"/>
+        <xs:attribute name="time-scope-code" type="timeScopeCodeType" use="optional"/>
+        <xs:attribute name="owner-class-name" type="classNameType" use="optional"/>
+        <xs:attribute name="db-object-type" type="dbObjectTypeType" use="optional"/>
+        <xs:attribute name="db-object-owner" type="dbObjectNameType" use="optional"/>
+        <xs:attribute name="db-object-name" type="dbObjectNameType" use="optional"/>
+        <xs:attribute name="db-object-attribute" type="dbObjectNameType" use="optional"/>
+        <xs:attribute name="app-space-cntx" type="cntxtType" use="required"/>
+    </xs:complexType>
+	
+    <xs:complexType name="appSpaceCntxElementType">
+        <xs:sequence>
+            <xs:element name="class-dependency-cnfg" type="classDependencyCnfgType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="class-trigger-actn-cnfg" type="classTriggerActnCnfgType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="class-relation-cnfg" type="classRelationCnfgType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="class-attribute-cnfg" type="classAttributeCnfgType" minOccurs="0" maxOccurs="unbounded"/>			
+        </xs:sequence>
+        <xs:attribute name="id" type="cntxtType" use="required"/>
+    </xs:complexType>
+	
+    <xs:complexType name="ownerCntxElementType">
+        <xs:sequence>
+            <xs:element name="class-property-cnfg" type="classPropertyCnfgType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="class-trigger-actn-ref" type="classTriggerActnRefType" minOccurs="0" maxOccurs="unbounded"/>			
+            <xs:element name="class-relation-ref" type="classRelationRefType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="class-attribute-ref" type="classAttributeRefType" minOccurs="0" maxOccurs="unbounded"/>			
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+    </xs:complexType>
+	
+    <xs:complexType name="classDependencyCnfgType">
+        <xs:attribute name="parent-class" type="classNameType" use="required"/>
+        <xs:attribute name="dependency-type" type="dependencyTypeType" use="required"/>
+    </xs:complexType>
+	
+    <xs:complexType name="classTriggerActnCnfgType">
+        <xs:sequence>
+            <xs:element name="db-sql-syntax" type="dbSqlSyntaxType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="triggering-event" type="triggeringEventType" use="required"/>
+        <xs:attribute name="trigger-type" type="triggerTypeType" use="required"/>
+        <xs:attribute name="sort-order" type="xs:nonNegativeInteger" use="required"/>
+        <xs:attribute name="description" type="descriptionType" use="optional"/>
+        <xs:attribute name="disabled-ind" type="indicatorType" use="optional"/>
+    </xs:complexType>
+	
+    <xs:complexType name="classTriggerActnRefType">
+        <xs:sequence>
+            <xs:element name="class-tra-property-cnfg" type="classTraPropertyCnfgType" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="triggering-event" type="triggeringEventType" use="required"/>
+        <xs:attribute name="trigger-type" type="triggerTypeType" use="required"/>
+        <xs:attribute name="sort-order" type="xs:nonNegativeInteger" use="required"/>
+    </xs:complexType>
+	
+    <xs:complexType name="classTraPropertyCnfgType">
+        <xs:sequence>
+            <xs:element name="property-value" type="propertyValueType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="property-code" type="propertyCodeType" use="required"/>
+        <xs:attribute name="property-type" type="propertyTypeType" use="required"/>
+    </xs:complexType>
+	
+    <xs:complexType name="classPropertyCnfgType">
+        <xs:sequence>
+            <xs:element name="property-value" type="propertyValueType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="property-code" type="propertyCodeType" use="required"/>
+        <xs:attribute name="property-type" type="propertyTypeType" use="required"/>
+        <xs:attribute name="presentation-cntx" type="cntxtType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="classRelationCnfgType">
+        <xs:sequence>
+            <xs:element name="db-sql-syntax" type="dbSqlSyntaxType" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="from-class-name" type="classNameType" use="required"/>
+        <xs:attribute name="role-name" type="roleNameType" use="required"/>
+        <xs:attribute name="is-key" type="indicatorType" use="optional"/>
+        <xs:attribute name="is-bidirectional" type="indicatorType" use="optional"/>
+        <xs:attribute name="group-type" type="codeType" use="optional"/>
+        <xs:attribute name="multiplicity" type="codeType" use="optional"/>
+        <xs:attribute name="db-mapping-type" type="codeType" use="optional"/>
+    </xs:complexType>
+	
+    <xs:complexType name="classRelationRefType">
+        <xs:sequence>
+            <xs:element name="class-rel-property-cnfg" type="classRelPropertyCnfgType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="from-class-name" type="classNameType" use="required"/>
+        <xs:attribute name="role-name" type="roleNameType" use="required"/>
+    </xs:complexType>
+	
+    <xs:complexType name="classRelPropertyCnfgType">
+        <xs:sequence>
+            <xs:element name="property-value" type="propertyValueType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="property-code" type="propertyCodeType" use="required"/>
+        <xs:attribute name="property-type" type="propertyTypeType" use="required"/>
+        <xs:attribute name="presentation-cntx" type="cntxtType" use="required"/>
+    </xs:complexType>
+	
+    <xs:complexType name="classAttributeCnfgType">
+        <xs:sequence>
+            <xs:element name="db-sql-syntax" type="dbSqlSyntaxType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="db-join-where" type="dbSqlSyntaxType" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="attribute-name" type="attributeNameType" use="required"/>
+        <xs:attribute name="is-key" type="indicatorType" use="optional"/>
+        <xs:attribute name="data-type" type="codeType" use="optional"/>
+        <xs:attribute name="reference-type" type="codeType" use="optional"/>
+        <xs:attribute name="reference-key" type="codeType" use="optional"/>
+        <xs:attribute name="reference-value" type="codeType" use="optional"/>
+        <xs:attribute name="db-mapping-type" type="codeType" use="optional"/>
+        <xs:attribute name="db-join-table" type="dbObjectNameType" use="optional"/>
+    </xs:complexType>
+	
+    <xs:complexType name="classAttributeRefType">
+        <xs:sequence>
+            <xs:element name="class-attr-property-cnfg" type="classAttrPropertyCnfgType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="attribute-name" type="attributeNameType" use="required"/>
+    </xs:complexType>
+	
+    <xs:complexType name="classAttrPropertyCnfgType">
+        <xs:sequence>
+            <xs:element name="property-value" type="propertyValueType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="property-code" type="propertyCodeType" use="required"/>
+        <xs:attribute name="property-type" type="propertyTypeType" use="required"/>
+        <xs:attribute name="presentation-cntx" type="cntxtType" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="class-xml" type="classXmlType"/>
+</xs:schema>
